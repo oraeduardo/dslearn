@@ -2,6 +2,8 @@ package com.devsuperior.dslearnbds.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,19 +32,22 @@ public class Offer implements Serializable {
 	private Instant endMoment;
 	
 	@ManyToOne
-	@JoinColumn(name = "corse_id")
-	private Corse corse;
-
+	@JoinColumn(name = "course_id")
+	private Course course;
+	
+	@OneToMany(mappedBy = "offer")
+	private List<Resource> resources = new ArrayList<>();
+	
 	public Offer() {
 	}
 
-	public Offer(Long id, String edition, Instant startMoment, Instant endMoment, Corse corse) {
+	public Offer(Long id, String edition, Instant startMoment, Instant endMoment, Course course) {
 		super();
 		this.id = id;
 		this.edition = edition;
 		this.startMoment = startMoment;
 		this.endMoment = endMoment;
-		this.corse = corse;
+		this.course = course;
 	}
 
 	public Long getId() {
@@ -76,12 +82,16 @@ public class Offer implements Serializable {
 		this.endMoment = endMoment;
 	}
 
-	public Corse getCorse() {
-		return corse;
+	public Course getCourse() {
+		return course;
 	}
 
-	public void setCorse(Corse corse) {
-		this.corse = corse;
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+	
+	public List<Resource> getResources() {
+		return resources;
 	}
 
 	@Override
