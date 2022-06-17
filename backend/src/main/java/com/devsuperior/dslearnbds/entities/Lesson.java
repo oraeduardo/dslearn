@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -44,7 +45,13 @@ public abstract class Lesson implements Serializable {
 			@JoinColumn(name = "offer_id")
 			}
 	)
-	private Set <Enrollment> enrollementsDone = new HashSet<>();
+	private Set<Enrollment> enrollmentsDone = new HashSet<>();
+	
+	@OneToMany(mappedBy = "lesson")
+	private Set<Deliver> deliveries = new HashSet<>();
+	
+	@OneToMany(mappedBy = "lesson")
+	private Set<Topic> topics = new HashSet<>();
 	
 	public Lesson() {
 	}
@@ -89,8 +96,12 @@ public abstract class Lesson implements Serializable {
 		this.section = section;
 	}
 
-	public Set<Enrollment> getEnrollementsDone() {
-		return enrollementsDone;
+	public Set<Enrollment> getEnrollmentsDone() {
+		return enrollmentsDone;
+	}
+
+	public Set<Deliver> getDeliveries() {
+		return deliveries;
 	}
 
 	@Override
