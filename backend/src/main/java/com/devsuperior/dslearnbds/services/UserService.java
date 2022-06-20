@@ -1,5 +1,6 @@
 package com.devsuperior.dslearnbds.services;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -17,15 +18,22 @@ import com.devsuperior.dslearnbds.entities.repositories.UserRepository;
 import com.devsuperior.dslearnbds.services.exceptions.ResourceNotFoundException;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private static Logger logger = LoggerFactory.getLogger(UserService.class);
 	
     @Autowired
     private UserRepository repository;
+    
+    @Autowired
+    private AuthService authService;
 	
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
+    	
+    	authService.validateSelfOrAdmin(id);
+    	
     	Optional<User> obj = repository.findById(id);
     	User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
     	return new UserDTO(entity);
